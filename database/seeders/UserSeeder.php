@@ -26,10 +26,11 @@ class UserSeeder extends Seeder
             'edit-events',
             'delete-events',
             'view-events',
+            'search-events',
         ];
 
         $buyerPermissions = [
-            'view-events',
+            'search-events',
         ];
 
         // Assign permissions to roles

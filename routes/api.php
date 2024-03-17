@@ -23,13 +23,12 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum', 'role:admin']], function () {
-    Route::post('/events/store', [EventController::class, 'store']);
-    Route::post('/events/update', [EventController::class, 'update']);
-    Route::post('/events/delete', [EventController::class, 'destroy']);
-    Route::post('/events/show', [EventController::class, 'show']);
-    Route::post('/events/search', [EventController::class, 'search']);
+    Route::post('/events/store', [EventController::class, 'store'])->name('create-events');
+    Route::post('/events/update', [EventController::class, 'update'])->name('edit-events');
+    Route::post('/events/delete', [EventController::class, 'destroy'])->name('delete-events');
+    Route::post('/events/show', [EventController::class, 'show'])->name('view-events');
 });
 
-Route::group(['middleware' => ['auth:sanctum', 'role:buyer']], function () {
-    Route::post('/events/search', [EventController::class, 'search']);
+Route::group(['middleware' => ['auth:sanctum', 'role:admin|buyer']], function () {
+    Route::post('/events/search', [EventController::class, 'search'])->name('search-events');
 });

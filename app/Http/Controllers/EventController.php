@@ -32,7 +32,7 @@ class EventController extends Controller
         $request->validate([
             'id' => 'required',
         ]);
-        $event = Event::select('id','name','description','latitude','longitude','date')->findOrFail($request->get('id'));
+        $event = Event::select('id','name','description','latitude','longitude','date')->find($request->get('id'));
         if ($event){
             $forecast = $this->weatherForecastService->getForecast($event->latitude, $event->longitude, $event->date);
             return response()->json(
@@ -78,10 +78,12 @@ class EventController extends Controller
         $request->validate([
             'id' => 'required',
         ]);
-        $event = Event::findOrFail($request->get('id'));
-        $event->update($request->all());
-        return response()->json(['message' => 'Event updated successfully', 'event' => $event]);
-
+        $event = Event::find($request->get('id'));
+        if(isset($event)){
+            $event->update($request->all());
+            return response()->json(['message' => 'Event updated successfully', 'event' => $event]);
+        }
+        return response()->json(['message' => 'Event not fount']);  
     }
 
     public function destroy(Request $request)
@@ -89,8 +91,14 @@ class EventController extends Controller
         $request->validate([
             'id' => 'required',
         ]);
-        $event = Event::findOrFail($request->get('id'));
-        $event->delete();
-        return response()->json(['message' => 'Event deleted successfully']);
+
+        $event = Event::find($request->get('id'));
+        
+        if(isset($event)){
+            $event->delete();
+            return response()->json(['message' => 'Event deleted successfully']);    
+        }
+        return response()->json(['message' => 'Event not fount']);    
+        
     }
 }
